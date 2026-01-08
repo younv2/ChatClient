@@ -1,59 +1,11 @@
+using Network;
 using System;
 using System.Net.Sockets;
-using System.Threading;
-using UnityEngine;
-using Network;
-using UnityEngine.UI;
-using TMPro;
 
-public class LoginView : MonoBehaviour
-{
-    private Socket m_sock;
-    
-    [SerializeField] private TMP_InputField m_InputField;
-    [SerializeField] private Button m_Btn;
-    public void ConnectServer()
-    {
-        var client = new TcpClient("127.0.0.1", 9000);
-        NetworkStream stream = client.GetStream();
-        m_sock = client.Client;
-    }
-    void Start()
-    {
-        ConnectServer();
-        ChatManager chatManager = new ChatManager();
-        m_Btn.onClick.AddListener(() =>
-        {
-
-            string nickname = m_InputField.text;
-            chatManager.SetNickname(nickname);
-            chatManager.ReqSetNickname(m_sock, nickname);
-        });
-        /*
-        Thread thread = new Thread(() =>
-        {
-            while (true)
-            {
-                chatManager.ACKChatMessage(m_sock);
-            }
-        });
-        thread.Start();
-        while (true)
-        {
-            Console.Write("메시지를 입력하세요: ");
-            string message = Console.ReadLine() ?? "null";
-            chatManager.ReqSetMessage(m_sock, message);
-        }*/
-    }
-}
-public class ChatManager
+public class ChatManager : Singleton<ChatManager>
 {
     private ChatData m_ChatData;
 
-    public ChatManager()
-    {
-        m_ChatData = new ChatData();
-    }
     public void ReqSetNickname(Socket _socket, string _nickname)
     {
         ReqChatDataPacket packet = new ReqChatDataPacket();
