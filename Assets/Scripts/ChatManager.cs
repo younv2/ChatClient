@@ -16,7 +16,7 @@ public class ChatManager : Singleton<ChatManager>
         packet.TimeStamp = DateTime.Now.Ticks;
 
         var bytes = ByteConverter.StructureToBytes(packet);
-        NetworkSystem.Send(_socket, bytes);
+        NetworkUtils.Send(_socket, bytes);
     }
     public void SetNickname(string _nickname)
     {
@@ -33,12 +33,12 @@ public class ChatManager : Singleton<ChatManager>
         packet.TimeStamp = DateTime.Now.Ticks;
 
         var bytes = ByteConverter.StructureToBytes(packet);
-        NetworkSystem.Send(_socket, bytes);
+        NetworkUtils.Send(_socket, bytes);
     }
 
     public void ACKChatMessage(Socket _socket)
     {
-        if (NetworkSystem.TryPeekHeader(_socket, out PacketHeader header) == false)
+        if (NetworkUtils.TryPeekHeader(_socket, out PacketHeader header) == false)
         {
             return;
         }
@@ -46,7 +46,7 @@ public class ChatManager : Singleton<ChatManager>
         {
             return;
         }
-        ACKChatMessageDataPacket _packet = NetworkSystem.ReadPacket<ACKChatMessageDataPacket>(_socket);
+        ACKChatMessageDataPacket _packet = NetworkUtils.ReadPacket<ACKChatMessageDataPacket>(_socket);
 
         Console.WriteLine($"{_packet.ChatData.Nickname} : {_packet.ChatData.Msg}");
     }

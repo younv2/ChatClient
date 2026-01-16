@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace Network
 {
-    public static class NetworkSystem
+    public static class NetworkUtils
     {
         /// <summary>
         /// 데이터 보내기
